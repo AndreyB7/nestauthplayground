@@ -7,8 +7,9 @@ export class AuthService {
         return 'Auth!';
       }
 
-    async validateJwks(headers): Promise<any> {
-        const user = headers.jwks.decode;
-        return false;
+    async validateJwks(request): Promise<any> {
+        console.log(request);
+        const isvalid = true;
+        return isvalid;
     }
 }

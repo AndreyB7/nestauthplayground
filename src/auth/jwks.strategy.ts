@@ -8,9 +8,8 @@ export class JwksStrategy extends PassportStrategy(Strategy) {
   constructor(private authService: AuthService) {
     super();
   }
-  async validate(headers): Promise<any> {
-    console.log(headers);
-    const user = await this.authService.validateJwks(headers);
+  async validate(request): Promise<any> {
+    const user = await this.authService.validateJwks(request);
     if (!user) {
       throw new UnauthorizedException();
     }

@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthGuard } from '@nestjs/passport';
+import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -11,8 +11,8 @@ export class AuthController {
     return this.authService.getHello();
     }
 
-    //@UseGuards(AuthGuard('jwks'))
-    @Post('google')
+    @UseGuards(AuthGuard)
+    @Get('google')
     async login(@Request() req) {
         return req.headers;
       }

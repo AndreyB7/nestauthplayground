@@ -5,12 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwksStrategy } from './jwks.strategy';
 
 @Module({
-  imports: [PassportModule.register({      
-    defaultStrategy: 'jwks',
-    property: 'user',
-    session: false,
-  })
-  ],
+  imports: [PassportModule],
   providers: [AuthService, JwksStrategy],
   controllers: [AuthController]
 })
