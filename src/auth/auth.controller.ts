@@ -11,7 +11,7 @@ export class AuthController {
     return this.authService.getHello();
     }
 
-    @UseGuards(AuthGuard())
+    //@UseGuards(AuthGuard('jwks'))
     @Post('google')
     async login(@Request() req) {
         return req.headers;
