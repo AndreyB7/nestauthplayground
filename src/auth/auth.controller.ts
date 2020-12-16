@@ -2,9 +2,10 @@ import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 
+
 @Controller('auth')
 export class AuthController {
-    constructor(private readonly authService: AuthService) {}
+    constructor(private readonly authService: AuthService ) {}
 
     @Get()
     getHello(): string {
@@ -14,7 +15,7 @@ export class AuthController {
     @UseGuards(AuthGuard)
     @Get('google')
     async login(@Request() req) {
-        return req.headers;
+        return this.authService.getUser(req);
       }
 
 }
