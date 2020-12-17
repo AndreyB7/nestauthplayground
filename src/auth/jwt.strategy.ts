@@ -1,25 +1,8 @@
-import { ExtractJwt, Strategy, UnauthorizedException, JwtPayloadInterface } from 'passport-jwt';
+import { ExtractJwt, Strategy, JwtPayloadInterface } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
-import { jwtConstants } from './constants';
-import { getMaxListeners } from 'process';
 
 const jwksRsa = require('jwks-rsa');
-
-// @Injectable()
-// export class JwtStrategy extends PassportStrategy(Strategy) {
-//   constructor() {
-//     super({
-//       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-//       ignoreExpiration: false,
-//       secretOrKey: jwtConstants.secret,
-//     });
-//   }
-
-//   async validate(payload: any) {
-//     return { userId: payload.sub, username: payload.username };
-//   }
-// }
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -39,9 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayloadInterface) {
-
-    const { email } = payload;
-
-    return email;
+    const user = {name: payload.name, email:payload.email};
+    return user;
   }
 }
