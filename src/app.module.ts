@@ -5,17 +5,15 @@ import { AuthModule } from './auth/auth.module';
 import { UsersService } from './users/users.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Connection } from 'typeorm';
+import { TypeOrmConfigService } from "./typeorm.options";
 
 @Module({
   imports: [
     AuthModule,
     UsersModule,
-    TypeOrmModule.forRoot()
+    TypeOrmModule.forRootAsync({useClass: TypeOrmConfigService}),
   ],
   controllers: [AppController],
   providers: [AppService, UsersService],
 })
-export class AppModule {
-  constructor(private connection: Connection) {}
-}
+export class AppModule {}

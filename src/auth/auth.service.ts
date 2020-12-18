@@ -13,10 +13,14 @@ export class AuthService {
     //const token = this.jwtService.sign(payload)
     return user;
   }
-  async validateUser(email: string): Promise<any> {
-    const user = await this.usersService.findOne(email);
-    if (user.email === email) {
-      return user;
+  async validateUser(user: any): Promise<any> {
+    const currentUser = await this.usersService.findOne(user.email);
+    if (currentUser && currentUser.email === user.email) {
+      return currentUser;
+    }
+    if (!currentUser) {
+      
+      return 'user nor found';
     }
     // add user
     return null;
