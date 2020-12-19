@@ -9,13 +9,11 @@ export class SetupUser1563804021014 implements MigrationInterface {
 
     await queryRunner.query(`
       INSERT INTO test.user (
-        email,
-        password,
-        roles
+        name,
+        email
       ) VALUES (
-        'trejgun@gmail.com',
-        '${passwordHash}',
-        '{admin}'
+        'olg',
+        'trejgun@gmail.com'
       );
     `);
   }

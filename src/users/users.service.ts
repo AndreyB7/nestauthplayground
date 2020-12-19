@@ -8,36 +8,25 @@ export type User = any;
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectRepository(UsersEntity)
-    private readonly userEntityRepository: Repository<UsersEntity>,
-  ) {}
-    private readonly users = [
-    {
-      userId: 1,
-      email: '0129507@gmail.com',
-      username: 'john4',
-      password: 'changeme',
-    },
-    {
-      userId: 2,
-      email: 'maria@gmail.com',
-      username: 'maria',
-      password: 'guess',
-    },
-  ];
 
-  async findOne(email: string): Promise<User | undefined> {
-    const user = this.users.find(user => user.email === email);
+  async findOne(where): Promise<User | undefined> {
+    const user  = await UsersEntity.findOne({where});
     return user;
   }
-  public async create(user): Promise<User | undefined> {
-    user = await this.userEntityRepository
-       .create({
-         ...user
-       });
-      //.save();
 
-    return user;
+  async getAllUsers(): Promise<UsersEntity[]> {
+    return await UsersEntity.find();
+  }
+
+  public async create(user): Promise<User | undefined> {
+    const usersEntity: UsersEntity = UsersEntity.create();
+    const {name, email} = user;
+    usersEntity.name = name;
+    usersEntity.email = email;
+    const newuser = await UsersEntity.save(usersEntity);
+    return newuser;
+  }
+  async remove(user): Promise<void> {
+    await UsersEntity.delete(user.id);
   }
 }

@@ -8,13 +8,6 @@ export class AddUserTable1562222612033 implements MigrationInterface {
   }
 
   public async up(queryRunner: QueryRunner): Promise<any> {
-    await queryRunner.query(`
-      CREATE TYPE test.user_role_enum AS ENUM (
-        'admin',
-        'user'
-      );
-    `);
-
     const table = new Table({
       name: "test.user",
       columns: [
@@ -24,18 +17,13 @@ export class AddUserTable1562222612033 implements MigrationInterface {
           isPrimary: true,
         },
         {
+          name: "name",
+          type: "varchar",
+        },
+        {
           name: "email",
           type: "varchar",
-        },
-        {
-          name: "password",
-          type: "varchar",
-        },
-        {
-          name: "roles",
-          type: "test.user_role_enum",
-          isArray: true,
-        },
+        }
       ],
     });
 

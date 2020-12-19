@@ -10,8 +10,8 @@ import { TypeOrmConfigService } from "./typeorm.options";
 @Module({
   imports: [
     AuthModule,
-    UsersModule,
     TypeOrmModule.forRootAsync({useClass: TypeOrmConfigService}),
+    UsersModule
   ],
   controllers: [AppController],
   providers: [AppService, UsersService],
