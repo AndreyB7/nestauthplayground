@@ -1,3 +1,4 @@
+import "./env"
 import {SnakeNamingStrategy} from "typeorm-naming-strategies";
 import {ConnectionOptions} from "typeorm";
 
@@ -5,12 +6,12 @@ import {ConnectionOptions} from "typeorm";
 const config: ConnectionOptions = {
   name: "default",
   type: "postgres",
-  host: "0.0.0.0", //172.20.0.1 // 172.20.0.2
-  port: 5432,
-  username: "postgres",
-  password: "password",
-  database: "TEST_USER",
-  //url: "postgres://postgres:password@postgres/postgres",
+  // host: "0.0.0.0", //172.20.0.1 // 172.20.0.2
+  // port: 5432,
+  // username: "postgres",
+  // password: "password",
+  //database: "TEST_USER",
+  url: process.env.POSTGRES_URL,
   entities: [`${__dirname}/**/*.entity{.ts,.js}`],
   // We are using migrations, synchronize should be set to false.
   synchronize: false,
