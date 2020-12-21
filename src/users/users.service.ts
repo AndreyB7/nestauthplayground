@@ -15,7 +15,7 @@ export class UsersService {
   ) {}
 
   async findOne(where): Promise<User | undefined> {
-    const user  = await UsersEntity.findOne({where});
+    const user  = await this.userEntityRepository.findOne({where});
     return user;
   }
 
@@ -32,6 +32,6 @@ export class UsersService {
     return newuser;
   }
   async remove(user): Promise<void> {
-    await UsersEntity.delete(user.id);
+    await this.userEntityRepository.delete(user.id);
   }
 }
