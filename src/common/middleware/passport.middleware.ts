@@ -16,6 +16,6 @@ export class PassportMiddleware implements NestMiddleware {
 
   use(req: Request, res, next: NextFunction): void {
     this.initialize(req, res, next);
-    //this.session(req, res, next);
+    this.session(req, res, next);
   }
 }
