@@ -8,6 +8,7 @@ import { PassportMiddleware } from './common/middleware/passport.middleware';
 //import { RateLimitMiddleware } from './common/middleware/rate-limit.middleware';
 import { SessionMiddleware } from './common/middleware/session.middleware';
 import { RateLimitMiddleware } from './common/middleware/rate-limit.middleware';
+import { MiddleController } from './middle/middle.controller';
 //import { ConfigService } from '@nestjs/config';
 
 @Module({
@@ -22,9 +23,8 @@ import { RateLimitMiddleware } from './common/middleware/rate-limit.middleware';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      //.apply(SessionMiddleware, RateLimitMiddleware, PassportMiddleware )
-      .apply(SessionMiddleware, RateLimitMiddleware, PassportMiddleware)
-      .forRoutes('middle');
+      .apply(RateLimitMiddleware, SessionMiddleware, PassportMiddleware)
+      .forRoutes(MiddleController);
   }
   
 }

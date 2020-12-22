@@ -15,6 +15,6 @@ export class MiddleController {
         console.log("CL passport: ");
         console.log(req._passport);
 
-      return req.session
+      return 'return'
     }
 }
