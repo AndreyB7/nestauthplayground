@@ -37,7 +37,7 @@ export class SessionMiddleware implements NestMiddleware {
     this.middleware(req, res, next);
     // console.log("session req:");
     // console.log(req);
-      console.log("session res:");
-      console.log(res)
+      // console.log("session res:");
+      // console.log(res)
   }
 }
