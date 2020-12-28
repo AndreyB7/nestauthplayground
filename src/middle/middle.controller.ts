@@ -1,18 +1,18 @@
-import { Controller, Request, Get, UseGuards } from '@nestjs/common';
-import { JwkAuthGuard } from 'src/auth/auth.guard';
+import { Controller, Get, Request, UseGuards } from '@nestjs/common';
+import { JwksAuthGuard } from 'src/auth/jwks.auth.guard';
 
-//@UseGuards(JwkAuthGuard)
 @Controller('middle')
 export class MiddleController {
-
+  
+    @UseGuards(JwksAuthGuard)  
     @Get()
-    async middletest(@Request() req) {
+    middletest(@Request() req) {
         
         console.log("CL session: ");
         console.log(req.session);
         console.log("CL passport: ");
         console.log(req._passport);
 
-      return req.session
+      return req.user
     }
 }

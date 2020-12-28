@@ -1,4 +1,4 @@
-import { ExtractJwt, Strategy, JwtPayloadInterface } from 'passport-jwt';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
@@ -6,7 +6,7 @@ import { UsersService } from '../users/users.service';
 const jwksRsa = require('jwks-rsa');
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwksStrategy extends PassportStrategy(Strategy) {
 
   constructor(private readonly usersService: UsersService) {
     super({
@@ -22,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: JwtPayloadInterface) {
+  async validate(payload) {
     const user = {name: payload.name, email:payload.email};
     return user;
   }
