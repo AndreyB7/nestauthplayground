@@ -1,37 +1,35 @@
-import { Connection, Repository } from "typeorm";
+import { Connection } from "typeorm";
 
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from "@nestjs/typeorm";
-import { UsersEntity } from "src/users/users.entity";
 
 @Injectable()
 export class DbService {
     constructor(
-        @InjectRepository(UsersEntity)
-        private userEntityRepository: Repository<UsersEntity>,
-        
         private connection: Connection,
     ) { }
-    async transaction(fn: Function) {
-        await this.connection.transaction( fn() );
-    }
 
-    async arrayTransaction(fn: Function) {
+    // async transactionCallBack(fn: Function) {
+    //     await this.connection.transaction('SERIALIZABLE', fn() );
+    // }
+        async transactionCallBack(entityArray) {
+            await this.connection.transaction( async manager => {
+                await manager.save(entityArray)
+            } );
+        }
+
+    async arrayTransaction(queryArray) {
         const queryRunner = this.connection.createQueryRunner();
 
         await queryRunner.connect();
         await queryRunner.startTransaction();
 
         try {
-            
-            const query = await fn();
-            console.log(query);
-            //await query.forEach( async (entity) =>
-            for (let i = 0; i < query.length; i++) {
-                await queryRunner.manager.save(query[i])
-                await queryRunner.manager.save(query[i])
-            }
-            //)
+            // .map .forEach - didnt work (COMMIT earlier than INSERT)
+            // INSERT * 3          
+            // for (let i = 0; i < queryArray.length; i++) {
+            //     await queryRunner.manager.save(queryArray[i])
+            // }
+            await queryRunner.manager.save(queryArray)
 
             await queryRunner.commitTransaction();
         } catch (err) {

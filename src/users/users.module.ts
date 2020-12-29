@@ -1,27 +1,21 @@
 import { Module } from '@nestjs/common';
 import {TypeOrmModule} from "@nestjs/typeorm";
 import { UsersService } from './users.service';
-import {UsersEntity} from "./users.entity";
-import { AuthService } from '../auth/auth.service';
 import { UsersController}  from './users.controller';
-//import { Connection } from 'typeorm';
-//import { DbService } from 'src/database/db.service';
-//import { DbModule } from 'src/database/db.module';
-import { AuthModule } from 'src/auth/auth.module';
-
+import {UsersEntity} from "./users.entity";
+import { DbModule } from 'src/database/db.module';
+import { DbService } from 'src/database/db.service';
+import { Connection } from 'typeorm';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([UsersEntity]),
-        //DbModule,
-        AuthModule,
+        DbModule,
     ],
-    providers: [UsersService,
-        // DbService,
-         AuthService],
+    providers: [UsersService, DbService],
     controllers: [UsersController],
     exports: [UsersService],
 })
 export class UsersModule {
-    //constructor(private connection: Connection) {}
+    constructor(private connection: Connection) {}
 }

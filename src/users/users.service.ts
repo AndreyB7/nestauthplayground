@@ -1,10 +1,8 @@
 import { Repository } from "typeorm";
-
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from "@nestjs/typeorm";
 import { UsersEntity } from "./users.entity";
-//import { DbService } from "src/database/db.service";
-import { AuthService } from "src/auth/auth.service";
+import { DbService } from "src/database/db.service";
 
 // This should be a real class/interface representing a user entity
 export type User = any;
@@ -12,30 +10,33 @@ export type User = any;
 @Injectable()
 export class UsersService {
   constructor(
-    private authService: AuthService,
     @InjectRepository(UsersEntity)
-    private readonly userEntityRepository: Repository<UsersEntity>
-    //private dbServise: DbService,
+    private readonly userEntityRepository: Repository<UsersEntity>,
+    private dbServise: DbService,
   ) { }
 
-  async authUser(req) {
-    return this.authService.validateUser(req.user);
+  async addUsersEntity(data) {
+    const usersEntity = data.users.map(
+      user => this.userEntityRepository.create({ name: user.name, email: user.email })
+    )
+    // TRANSACTION INSERT * 1 COMMIT
+    this.userEntityRepository.save(usersEntity)
+    return {"complete": "true"}
+  }
+  async addUsersTransaction(data) {
+    const usersEntity = data.users.map(
+      user => this.userEntityRepository.create({ name: user.name, email: user.email })
+    )
+    await this.dbServise.arrayTransaction(usersEntity);
+    return {"transaction": "true"}
   }
 
-  async addUsers(userData) {
-    // await this.dbServise.transaction( async ()=> {
-       
-    //   //const entityarr = [
-    //     await this.userEntityRepository.create({ name: userData.name, email: userData.email }),
-    //     await this.userEntityRepository.create({ name: userData.name, email: userData.email })
-    //   //]
-    //   //return entityarr
-    // })
+  async addUsersTransactionCallback(data) {
+    const entityData = this.userEntityRepository.create(data.users)
+    this.dbServise.transactionCallBack(entityData)
+    return {"transactionCallBack": "true"}
   }
-  async addUsersArray(user) {
-    //user = this.userEntityRepository;
-    //await this.dbServise.arrayTransaction([user, user, user]);
-  }
+
 
   async findOne(where): Promise<User | undefined> {
     const user = await this.userEntityRepository.findOne({ where });
