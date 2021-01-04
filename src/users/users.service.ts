@@ -1,27 +1,43 @@
-import { Repository } from "typeorm";
+import { EntityManager, Entity, EntityTarget, ObjectID, Repository } from "typeorm";
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from "@nestjs/typeorm";
 import { UsersEntity } from "./users.entity";
 import { DbService } from "src/database/db.service";
+import { Connection } from "typeorm";
+import { IUser } from "src/auth/interfaces/user";
 
 // This should be a real class/interface representing a user entity
 export type User = any;
+export type usersEntity = EntityTarget<UsersEntity>;
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UsersEntity)
-    private readonly userEntityRepository: Repository<UsersEntity>,
+    private userEntityRepository: Repository<UsersEntity>,
     private dbServise: DbService,
+    private connection: Connection,
   ) { }
 
-  async addUsersEntity(data) {
-    const usersEntity = data.users.map(
-      user => this.userEntityRepository.create({ name: user.name, email: user.email })
-    )
-    // TRANSACTION INSERT * 1 COMMIT
-    this.userEntityRepository.save(usersEntity)
-    return {"complete": "true"}
+  async addUsersEntity(users: IUser[]) {
+    await this.connection.transaction('READ COMMITTED', async (manager: EntityManager) => {
+      
+      const usersEntity = users.map(
+        user => this.userEntityRepository.create({ name: user.name, email: user.email })
+      )
+      const userEntityRepositoryManager = manager.getRepository(UsersEntity);
+      //const usersRepository = manager.getRepository('usersEntity');
+      // TRANSACTION INSERT*1 COMMIT
+      //this.userEntityRepository.save(usersEntity)
+      await userEntityRepositoryManager.save(usersEntity[0]);
+      const readUserM = await this.userEntityRepository.findOne({ email: "first@gmail.com" });
+      const readUserE = await userEntityRepositoryManager.findOne({ email: "first@gmail.com" });
+      console.log(readUserM);
+      console.log(readUserE);
+      await this.dbServise.managerForvardTest(usersEntity, userEntityRepositoryManager)
+      
+    })
+    return await this.userEntityRepository.findOne({ email: "first@gmail.com" });
   }
   async addUsersTransaction(data) {
     const usersEntity = data.users.map(

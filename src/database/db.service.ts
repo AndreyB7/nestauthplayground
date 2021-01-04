@@ -1,4 +1,4 @@
-import { Connection } from "typeorm";
+import { Connection, EntityManager } from "typeorm";
 
 import { Injectable } from '@nestjs/common';
 
@@ -38,5 +38,8 @@ export class DbService {
         } finally {
             await queryRunner.release();
         }
+    }
+    async managerForvardTest(userEntity, userEntityRepositoryManager) {
+        return await userEntityRepositoryManager.save(userEntity);
     }
 }

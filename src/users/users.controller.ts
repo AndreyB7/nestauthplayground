@@ -20,9 +20,9 @@ export class UsersController {
   @Get('profile')
   async addDataToDB(@Body() data) {
     // various add to DB solutions:
-    //const response = this.userService.addUsersEntity(data)
+    const response = this.userService.addUsersEntity(data.users)
     //const response = this.userService.addUsersTransaction(data)
-    const response = this.userService.addUsersTransactionCallback(data)
+    //const response = this.userService.addUsersTransactionCallback(data)
     return response
   }
   
